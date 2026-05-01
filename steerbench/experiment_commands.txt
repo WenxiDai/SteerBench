@@ -1,0 +1,59 @@
+Course-scope command list
+=========================
+
+Use only the minimal end-to-end flow below.
+
+1) Generate training data
+-------------------------
+
+python scripts/generate.py \
+  --config demo/sweep/simple.yaml \
+  --mode training \
+  --dump_dir demo
+
+2) Generate latent inference data
+---------------------------------
+
+python scripts/generate.py \
+  --config demo/sweep/simple.yaml \
+  --mode latent \
+  --dump_dir demo
+
+3) Train methods
+----------------
+
+torchrun --nproc_per_node=$gpu_count scripts/train.py \
+  --config demo/sweep/simple.yaml \
+  --dump_dir demo
+
+4) Run latent inference
+-----------------------
+
+torchrun --nproc_per_node=$gpu_count scripts/inference.py \
+  --config demo/sweep/simple.yaml \
+  --dump_dir demo \
+  --mode latent
+
+5) Run steering inference
+-------------------------
+
+torchrun --nproc_per_node=$gpu_count scripts/inference.py \
+  --config demo/sweep/simple.yaml \
+  --dump_dir demo \
+  --mode steering
+
+6) Evaluate latent
+------------------
+
+python scripts/evaluate.py \
+  --config demo/sweep/simple.yaml \
+  --dump_dir demo \
+  --mode latent
+
+7) Evaluate steering
+--------------------
+
+python scripts/evaluate.py \
+  --config demo/sweep/simple.yaml \
+  --dump_dir demo \
+  --mode steering
